@@ -41,8 +41,8 @@ return [
     'image_driver' => 'openai',
     'transcription_driver' => 'openai',
     'speech_driver' => 'openai',
-    'openai' => ['api_key' => env('OPENAI_API_KEY')],
-    'gemini' => ['api_key' => env('GEMINI_API_KEY')],
+    'openai' => ['api_key' => getenv('OPENAI_API_KEY') ?: null],
+    'gemini' => ['api_key' => getenv('GEMINI_API_KEY') ?: null],
 ];
 ```
 
