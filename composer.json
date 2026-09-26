@@ -1,6 +1,6 @@
 {
   "name": "ez-php/ai-media",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "description": "Image generation, audio transcription, and text-to-speech via OpenAI/Gemini drivers over ez-php/http-client",
   "type": "library",
   "license": "MIT",
