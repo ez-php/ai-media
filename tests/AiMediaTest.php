@@ -27,8 +27,34 @@ final class AiMediaTest extends TestCase
         AiMedia::resetSpeech();
     }
 
-    public function testLazilyDefaultsToNullDrivers(): void
+    public function testUnsetImageGeneratorThrows(): void
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('AiMediaServiceProvider');
+
+        AiMedia::getImageGenerator();
+    }
+
+    public function testUnsetTranscriberThrows(): void
+    {
+        $this->expectException(\RuntimeException::class);
+
+        AiMedia::getTranscriber();
+    }
+
+    public function testUnsetSpeechThrows(): void
+    {
+        $this->expectException(\RuntimeException::class);
+
+        AiMedia::getSpeech();
+    }
+
+    public function testExplicitNullDriversCanStillBeSet(): void
+    {
+        AiMedia::setImageGenerator(new NullImageDriver());
+        AiMedia::setTranscriber(new NullTranscriberDriver());
+        AiMedia::setSpeech(new NullSpeechDriver());
+
         $this->assertInstanceOf(NullImageDriver::class, AiMedia::getImageGenerator());
         $this->assertInstanceOf(NullTranscriberDriver::class, AiMedia::getTranscriber());
         $this->assertInstanceOf(NullSpeechDriver::class, AiMedia::getSpeech());

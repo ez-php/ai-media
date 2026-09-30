@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace EzPhp\AiMedia;
 
-use EzPhp\AiMedia\Driver\NullImageDriver;
-use EzPhp\AiMedia\Driver\NullSpeechDriver;
-use EzPhp\AiMedia\Driver\NullTranscriberDriver;
 use EzPhp\AiMedia\Request\ImageGenerationRequest;
 use EzPhp\AiMedia\Request\SpeechRequest;
 use EzPhp\AiMedia\Request\TranscriptionRequest;
@@ -20,7 +17,8 @@ use EzPhp\AiMedia\Response\TranscriptionResponse;
  * The three drivers are wired independently by AiMediaServiceProvider on boot,
  * mirroring ez-php/ai's Ai façade split between AiClientInterface and
  * EmbeddingClientInterface — not every provider offers all three capabilities.
- * Without a service provider, the façade falls back to Null* drivers.
+ * Without a service provider every call throws a RuntimeException naming
+ * AiMediaServiceProvider (a silent Null* fallback returned empty results).
  *
  * Usage after AiMediaServiceProvider registration:
  *
@@ -57,12 +55,14 @@ final class AiMedia
     }
 
     /**
+     * @throws \RuntimeException When nothing has been set (AiMediaServiceProvider not registered).
+     *
      * @return ImageGeneratorInterface
      */
     public static function getImageGenerator(): ImageGeneratorInterface
     {
         if (self::$imageGenerator === null) {
-            self::$imageGenerator = new NullImageDriver();
+            throw new \RuntimeException('AiMedia image generator not set. Did you register AiMediaServiceProvider?');
         }
 
         return self::$imageGenerator;
@@ -89,12 +89,14 @@ final class AiMedia
     }
 
     /**
+     * @throws \RuntimeException When nothing has been set (AiMediaServiceProvider not registered).
+     *
      * @return TranscriberInterface
      */
     public static function getTranscriber(): TranscriberInterface
     {
         if (self::$transcriber === null) {
-            self::$transcriber = new NullTranscriberDriver();
+            throw new \RuntimeException('AiMedia transcriber not set. Did you register AiMediaServiceProvider?');
         }
 
         return self::$transcriber;
@@ -121,12 +123,14 @@ final class AiMedia
     }
 
     /**
+     * @throws \RuntimeException When nothing has been set (AiMediaServiceProvider not registered).
+     *
      * @return SpeechInterface
      */
     public static function getSpeech(): SpeechInterface
     {
         if (self::$speech === null) {
-            self::$speech = new NullSpeechDriver();
+            throw new \RuntimeException('AiMedia speech driver not set. Did you register AiMediaServiceProvider?');
         }
 
         return self::$speech;
